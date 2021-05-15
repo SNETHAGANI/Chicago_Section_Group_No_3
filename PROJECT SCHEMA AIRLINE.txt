@@ -2,7 +2,7 @@ CREATE TABLE Airline
 (
   airline_code CHAR(2) NOT NULL,
   name VARCHAR(100) NOT NULL,
-  country VARCHAR(100) NOT NULL,
+  country CHAR(100) NOT NULL,
   PRIMARY KEY (airline_code)
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE Mileage
 (
   distance_recorded DECIMAL NOT NULL,
   bonus_count DECIMAL NOT NULL,
-  mileage_Id VARCHAR(50) NOT NULL,
+  mileage_Id VARCHAR(100) NOT NULL,
   IATA_Location CHAR(50) NOT NULL,
   arrivalIATA_Location INT NOT NULL,
   Flight_code INT NOT NULL,
