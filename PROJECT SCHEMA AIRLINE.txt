@@ -1,0 +1,111 @@
+CREATE TABLE Airline
+(
+  airline_code CHAR(2) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  country VARCHAR(100) NOT NULL,
+  PRIMARY KEY (airline_code)
+);
+
+CREATE TABLE Flight
+(
+  Flight_code INT NOT NULL,
+  seat_capacity INT NOT NULL,
+  airline_code CHAR(2) NOT NULL,
+  PRIMARY KEY (Flight_code),
+  FOREIGN KEY (airline_code) REFERENCES Airline(airline_code)
+);
+
+CREATE TABLE Airport
+(
+  IATA_Location CHAR(50) NOT NULL,
+  airport_name VARCHAR(100) NOT NULL,
+  state CHAR(50) NOT NULL,
+  country CHAR(50) NOT NULL,
+  PRIMARY KEY (IATA_Location)
+);
+
+CREATE TABLE seat
+(
+  seat_no VARCHAR(50) NOT NULL,
+  availability VARCHAR(50) NOT NULL,
+  class VARCHAR(200) NOT NULL,
+  Flight_code INT NOT NULL,
+  PRIMARY KEY (seat_no, Flight_code),
+  FOREIGN KEY (Flight_code) REFERENCES Flight(Flight_code)
+);
+
+CREATE TABLE Mileage
+(
+  distance_recorded DECIMAL NOT NULL,
+  bonus_count DECIMAL NOT NULL,
+  mileage_Id VARCHAR(50) NOT NULL,
+  IATA_Location CHAR(50) NOT NULL,
+  arrivalIATA_Location INT NOT NULL,
+  Flight_code INT NOT NULL,
+  PRIMARY KEY (mileage_Id),
+  FOREIGN KEY (IATA_Location) REFERENCES Airport(IATA_Location),
+  FOREIGN KEY (arrivalIATA_Location) REFERENCES Airport(IATA_Location),
+  FOREIGN KEY (Flight_code) REFERENCES Flight(Flight_code)
+);
+
+CREATE TABLE Flight_booking
+(
+  booking_id VARCHAR(100) NOT NULL,
+  no_of_travellers INT NOT NULL,
+  arrival_airport VARCHAR(100) NOT NULL,
+  depart_time TIMESTAMP(6) NOT NULL,
+  arrival_time TIMESTAMP(6) NOT NULL,
+  departure_aitport VARCHAR(100) NOT NULL,
+  PRIMARY KEY (booking_id)
+);
+
+CREATE TABLE price
+(
+  amount DECIMAL NOT NULL,
+  discount DECIMAL NOT NULL,
+  tax DECIMAL NOT NULL,
+  final_amount DECIMAL NOT NULL,
+  booking_id VARCHAR(100) NOT NULL,
+  FOREIGN KEY (booking_id) REFERENCES Flight_booking(booking_id)
+);
+
+CREATE TABLE customer
+(
+  email_id VARCHAR(100) NOT NULL,
+  card_no INT NOT NULL,
+  address VARCHAR(200) NOT NULL,
+  booking_id VARCHAR(100) NOT NULL,
+  PRIMARY KEY (email_id),
+  FOREIGN KEY (booking_id) REFERENCES Flight_booking(booking_id)
+);
+
+CREATE TABLE access
+(
+  IATA_Location CHAR(50) NOT NULL,
+  Flight_code INT NOT NULL,
+  PRIMARY KEY (IATA_Location, Flight_code),
+  FOREIGN KEY (IATA_Location) REFERENCES Airport(IATA_Location),
+  FOREIGN KEY (Flight_code) REFERENCES Flight(Flight_code)
+);
+
+CREATE TABLE have
+(
+  booking_id VARCHAR(100) NOT NULL,
+  mileage_Id VARCHAR(100) NOT NULL,
+  PRIMARY KEY (booking_id, mileage_Id),
+  FOREIGN KEY (booking_id) REFERENCES Flight_booking(booking_id),
+  FOREIGN KEY (mileage_Id) REFERENCES Mileage(mileage_Id)
+);
+
+CREATE TABLE passenger
+(
+  id VARCHAR(50) NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  seat_no VARCHAR(50) NOT NULL,
+  Flight_code INT NOT NULL,
+  booking_id VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (seat_no, Flight_code) REFERENCES seat(seat_no, Flight_code),
+  FOREIGN KEY (booking_id) REFERENCES Flight_booking(booking_id)
+);
